@@ -1,5 +1,9 @@
 import pygame, random
 
+CPU_START_X = 725
+CPU_START_Y = 200
+CPU_SPEED = 2
+
 PLAYER_START_X = 50
 PLAYER_START_Y = 200
 PLAYER_SPEED = 2
@@ -39,6 +43,10 @@ def main():
   player_x = PLAYER_START_X
   player_y = PLAYER_START_Y
 
+  cpu = pygame.image.load("paddle.png")
+  cpu_x = CPU_START_X
+  cpu_y = CPU_START_Y
+
   ball = pygame.image.load("red-ball.png")
   ball_x = BALL_START_X
   ball_y = BALL_START_Y
@@ -57,6 +65,7 @@ def main():
     screen.fill((0, 0, 0))
     screen.blit(player, (player_x, player_y))
     screen.blit(ball, (ball_x, ball_y))
+    screen.blit(cpu, (cpu_x, cpu_y))
     pygame.display.flip()
 
     if ball_y <= 0:
@@ -66,13 +75,18 @@ def main():
 
     if player_x <= ball_x <= player_x + 25 and player_y <= ball_y <= player_y + 160:
       ball_x_direction = "RIGHT"
-    elif ball_x >= 800:
+    elif cpu_x <= ball_x <= cpu_x + 25 and cpu_y <= ball_y <= cpu_y + 160:
       ball_x_direction = "LEFT"
 
     if player_direction == "UP" and player_y >= 15:
       player_y -= PLAYER_SPEED
     elif player_direction == "DOWN" and player_y <= 425:
       player_y += PLAYER_SPEED
+
+    if ball_y < (cpu_y + 80) and cpu_y >= 15:
+      cpu_y -= CPU_SPEED
+    elif ball_y > (cpu_y + 80) and cpu_y <= 425:
+      cpu_y += CPU_SPEED
 
     if ball_y_direction == "UP":
       ball_y -= BALL_SPEED
