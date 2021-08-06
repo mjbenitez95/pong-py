@@ -1,16 +1,18 @@
-import pygame, random, time
+import pygame, random, time, sys
 
 CPU_START_X = 725
 CPU_START_Y = 200
-CPU_SPEED = 1.5
+CPU_SPEED = 3
 
 PLAYER_START_X = 50
 PLAYER_START_Y = 200
-PLAYER_SPEED = 2
+PLAYER_SPEED = 4
 
 BALL_START_X = 390
 BALL_START_Y = 290
-BALL_SPEED = 2
+BALL_SPEED = 4
+
+FPS = 90
 
 def process_player_input(player_direction):
   for event in pygame.event.get():
@@ -24,7 +26,9 @@ def process_player_input(player_direction):
         player_direction = "NONE"
       elif event.key == pygame.K_DOWN and player_direction == "DOWN":
         player_direction = "NONE"
-        
+    if event.type == pygame.QUIT:
+      pygame.quit()
+      sys.exit()
 
   return player_direction
 
@@ -37,6 +41,7 @@ def main():
   random.seed()
   pygame.init()
   pygame.font.init()
+  fps_clock = pygame.time.Clock()
 
   my_font = pygame.font.SysFont('Times New Roman', 30)
   logo = pygame.image.load("logo.png")
@@ -110,6 +115,7 @@ def main():
       running = False
 
     player_direction = process_player_input(player_direction)
+    fps_clock.tick(FPS)
 
   time.sleep(3)
 
