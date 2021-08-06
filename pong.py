@@ -1,8 +1,8 @@
-import pygame, random
+import pygame, random, time
 
 CPU_START_X = 725
 CPU_START_Y = 200
-CPU_SPEED = 2
+CPU_SPEED = 1.5
 
 PLAYER_START_X = 50
 PLAYER_START_Y = 200
@@ -36,7 +36,9 @@ def setup_screen(player, ball):
 def main():
   random.seed()
   pygame.init()
-  
+  pygame.font.init()
+
+  my_font = pygame.font.SysFont('Times New Roman', 30)
   logo = pygame.image.load("logo.png")
 
   player = pygame.image.load("paddle.png")
@@ -57,7 +59,7 @@ def main():
   screen = setup_screen(player, ball)
   
   player_direction = "NONE"
-  ball_x_direction = "LEFT"
+  ball_x_direction = "RIGHT"
   ball_y_direction = random.choice(["DOWN", "UP"])
   running = True
 
@@ -98,7 +100,18 @@ def main():
     else:
       ball_x += BALL_SPEED
 
+    if ball_x <= 0 or ball_x >= 800:
+      if ball_x <= 0:
+        text_surface = my_font.render( "CPU Wins!", False, (255, 255, 255))
+      else:
+        text_surface = my_font.render( "Player Wins!", False, (255, 255, 255))
+      screen.blit(text_surface, (BALL_START_X - 75, BALL_START_Y - 50))
+      pygame.display.flip()
+      running = False
+
     player_direction = process_player_input(player_direction)
+
+  time.sleep(3)
 
 if __name__ == "__main__":
   main()
